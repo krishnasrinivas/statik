@@ -24,6 +24,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/hoisie/mustache"
 )
 
 var zipData string
@@ -100,7 +102,7 @@ func (fs *statikFS) Open(name string) (http.File, error) {
 func newHTTPFile(file file, isDir bool) *httpFile {
 	return &httpFile{
 		file:   file,
-		reader: bytes.NewReader(file.data),
+		reader: bytes.NewReader([]byte(mustache.Render(string(file.data), map[string]string{"IP": "192.178.0.0"}))),
 		isDir:  isDir,
 	}
 }
